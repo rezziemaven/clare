@@ -13,7 +13,7 @@ def user_model() -> sqlite3.Cursor | None:
         );"""
 
     try:
-        with sqlite3.connect("clare.db") as conn:
+        with sqlite3.connect("app/models/clare.db") as conn:
             cur = conn.cursor()
             cur.execute(query)
             conn.commit()
