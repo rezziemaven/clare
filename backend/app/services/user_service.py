@@ -1,5 +1,6 @@
 import sqlite3
 
+from app.types.user import User
 from app.models.user import CREATE_USER, GET_USER
 
 def create_user(user:User, conn) -> int | None:
