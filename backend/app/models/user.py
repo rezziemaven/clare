@@ -11,6 +11,12 @@ CREATE_USERS_TABLE = """CREATE TABLE IF NOT EXISTS users (
         calendar_url TEXT
         );"""
 
+CREATE_USER = """INSERT INTO users
+(name, email, password, date_last_period, rest_offset_before, rest_offset_after)
+VALUES(?,?,?,?,?,?)"""
+
+GET_USER = """SELECT id, name, email, date_last_period, rest_offset_before, rest_offset_after, calendar_url FROM users"""
+
     try:
         with sqlite3.connect("app/models/clare.db") as conn:
             cur = conn.cursor()
