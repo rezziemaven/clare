@@ -17,10 +17,11 @@ VALUES(?,?,?,?,?,?)"""
 
 GET_USER = """SELECT id, name, email, date_last_period, rest_offset_before, rest_offset_after, calendar_url FROM users"""
 
+def user_model() -> sqlite3.Cursor | None:
     try:
         with sqlite3.connect("app/models/clare.db") as conn:
             cur = conn.cursor()
-            cur.execute(query)
+            cur.execute(CREATE_USERS_TABLE)
             conn.commit()
             print("User table created successfully.")
     except sqlite3.OperationalError as e:
