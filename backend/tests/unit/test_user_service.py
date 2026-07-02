@@ -104,6 +104,19 @@ def test_get_user(test_conn):
   res = get_user(user_id, test_conn)
   assert res == (1, "A", "a@email.com", date(2026,5,11), 6, 4, None)
 
+def test_get_user_not_found(test_conn):
+    """Should not return a user when ID does not exist"""
+    user = {
+      "name": "B",
+      "email": "b@email.com",
+      "password": "5678",
+      "date_last_period": "2026-06-12"
+    }
+    new_user_id = create_user(user, test_conn)
+
+    res = get_user(2, test_conn)
+    assert res == None
+
 
 
 
