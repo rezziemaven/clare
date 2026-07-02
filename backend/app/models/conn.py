@@ -1,4 +1,4 @@
-import sqlite3
+from app.utils.sqlite import sqlite3
 
 def get_conn():
     try:
