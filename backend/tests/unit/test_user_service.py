@@ -1,5 +1,5 @@
 import pytest
-import sqlite3
+from app.utils.sqlite import sqlite3
 
 from app.services.user_service import create_user, get_user
 from app.models.user import CREATE_USERS_TABLE
