@@ -4,7 +4,6 @@ import sqlite3
 
 def adapt_date_iso(val):
     """Adapt datetime.date to ISO 8601 date."""
-    print("in adapt_date_iso!")
     return val.isoformat()
 
 def adapt_datetime_iso(val):
@@ -21,7 +20,6 @@ sqlite3.register_adapter(dt.datetime, adapt_datetime_epoch)
 
 def convert_date(val):
     """Convert ISO 8601 date to datetime.date object."""
-    print("in convert_date!")
     return dt.date.fromisoformat(val.decode())
 
 def convert_datetime(val):
