@@ -1,4 +1,5 @@
 import pytest
+import datetime
 from app.utils.sqlite import sqlite3
 
 from app.services.user_service import create_user, get_user
@@ -90,7 +91,7 @@ def test_get_user(test_conn):
   user_id = create_user(user, test_conn)
 
   res = get_user(user_id, test_conn)
-  assert res == (1, "A", "a@email.com", "2026-05-11", 6, 4, None)
+  assert res == (1, "A", "a@email.com", datetime.date(2026,5,11), 6, 4, None)
 
 
 # TODO: Move the function below to a different place checking that the format is valid first, perhaps client side
