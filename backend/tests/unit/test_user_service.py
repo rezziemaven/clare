@@ -2,7 +2,7 @@ import pytest
 from datetime import date
 from app.utils.sqlite import sqlite3
 
-from app.services.user_service import create_user, get_user
+from app.services.user_service import create_user, get_user, get_user_for_auth
 from app.models.user import CREATE_USERS_TABLE
 
 db_path = "tests/clare_test.db"
@@ -116,6 +116,21 @@ def test_get_user_not_found(test_conn):
 
     res = get_user(2, test_conn)
     assert res == None
+
+def test_get_user_for_auth(test_conn):
+  """Should successfully retrieve a user with password from the db"""
+  user = {
+    "name": "A",
+    "email": "a@email.com",
+    "password": "1234",
+    "date_last_period": "2026-05-11",
+    "rest_offset_before": 6,
+    "rest_offset_after": 4,
+  }
+  user_id = create_user(user, test_conn)
+
+  res = get_user_for_auth(user_id, test_conn)
+  assert res == (1, "A", "a@email.com", "1234", date(2026,5,11), 6, 4, None)
 
 
 
