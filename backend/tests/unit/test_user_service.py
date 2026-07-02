@@ -1,5 +1,5 @@
 import pytest
-import datetime
+from datetime import date
 from app.utils.sqlite import sqlite3
 
 from app.services.user_service import create_user, get_user
@@ -71,12 +71,23 @@ def test_create_user_email_exists(test_conn):
       "date_last_period": "2026-03-03"
     }
 
-
-
   res1 = create_user(user1, test_conn)
   res2 = create_user(user2, test_conn)
   assert res1 == 1
   assert res2 == None
+
+def test_create_user_invalid_date_format(test_conn):
+  """Should not create a user if the date provided is invalid"""
+
+  user = {
+    "name": "E",
+    "email": "e@email.com",
+    "password": "1111",
+    "date_last_period": "13-01-20206"
+  }
+
+  res = create_user(user, test_conn)
+  assert res == None
 
 def test_get_user(test_conn):
   """Should successfully retrieve a user from the db"""
@@ -91,21 +102,9 @@ def test_get_user(test_conn):
   user_id = create_user(user, test_conn)
 
   res = get_user(user_id, test_conn)
-  assert res == (1, "A", "a@email.com", datetime.date(2026,5,11), 6, 4, None)
+  assert res == (1, "A", "a@email.com", date(2026,5,11), 6, 4, None)
 
 
-# TODO: Move the function below to a different place checking that the format is valid first, perhaps client side
-# def test_create_user_invalid_date_format(test_conn):
-#   """Should not create a user if the date provided is invalid"""
 
-#   user = {
-#     "name": "D",
-#     "email": "d@email.com",
-#     "password": "1111",
-#     "date_last_period": "13-01-20206"
-#   }
-
-#   res = create_user(user, test_conn)
-#   assert res == None
 
 
