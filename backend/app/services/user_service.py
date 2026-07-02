@@ -20,7 +20,7 @@ def create_user(user:User, conn) -> int | None:
 def get_user(userId: int, conn) -> User | None:
     try:
         cur = conn.cursor()
-        cur.execute(GET_USER)
+        cur.execute(GET_USER, (userId,))
         row = cur.fetchone()
         print(f"row: {row}")
         return row
