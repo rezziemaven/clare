@@ -17,6 +17,8 @@ VALUES(?,?,?,?,?,?)"""
 
 GET_USER = """SELECT id, name, email, date_last_period, rest_offset_before, rest_offset_after, calendar_url FROM users WHERE id = ?"""
 
+GET_USER_FOR_AUTH = """SELECT id, name, email, password, date_last_period, rest_offset_before, rest_offset_after, calendar_url FROM users WHERE id = ?"""
+
 def user_model() -> sqlite3.Cursor | None:
     try:
         with sqlite3.connect("app/models/clare.db") as conn:
