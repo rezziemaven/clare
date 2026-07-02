@@ -2,7 +2,7 @@ import sqlite3
 from datetime import date
 
 from app.types.user import User
-from app.models.user import CREATE_USER, GET_USER
+from app.models.user import CREATE_USER, GET_USER, GET_USER_FOR_AUTH
 
 def create_user(user:User, conn) -> int | None:
     try:
@@ -27,7 +27,12 @@ def get_user(userId: int, conn) -> User | None:
     except sqlite3.Error as e:
         print("Failed to get user:", e)
 
-
-
-def get_user_for_auth(userID: int) -> User | None:
-    pass
+def get_user_for_auth(userId: int, conn) -> User | None:
+    try:
+        cur = conn.cursor()
+        cur.execute(GET_USER_FOR_AUTH, (userId,))
+        row = cur.fetchone()
+        print(f"row: {row}")
+        return row
+    except sqlite3.Error as e:
+        print("Failed to get user:", e)
