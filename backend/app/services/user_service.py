@@ -37,17 +37,17 @@ def get_user_for_auth(user_id: int, conn: sqlite3.Connection) -> User | None:
     except sqlite3.Error as e:
         print("Failed to get user:", e)
 
-def update_user(user_id: int, updateUserPayload: UpdateUserPayload, conn: sqlite3.Connection) -> User | None:
+def update_user(user_id: int, update_user_payload: UpdateUserPayload, conn: sqlite3.Connection) -> User | None:
     try:
         # need to build query based on what the payload actually has set, making sure none of the values are None
-        if updateUserPayload is None:
+        if update_user_payload is None:
             return None
         query = "UPDATE users SET"
-        for col in updateUserPayload:
+        for col in update_user_payload:
             if col == "date_last_period":
-                query += f"{col} = {date.fromisoformat(updateUserPayload[col])}"
+                query += f"{col} = {date.fromisoformat(update_user_payload[col])}"
             else:
-                query += f"{col} = {updateUserPayload[col]},"
+                query += f"{col} = {update_user_payload[col]},"
         query.removesuffix(",")
         query += "WHERE id = ?"
 
