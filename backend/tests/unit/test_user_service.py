@@ -5,16 +5,14 @@ from app.utils.sqlite import sqlite3
 from app.services.user_service import create_user, get_user, get_user_for_auth
 from app.models.user import CREATE_USERS_TABLE
 
-db_path = "tests/clare_test.db"
-
 @pytest.fixture
 def test_conn():
-    conn = sqlite3.connect(":memory:", detect_types=sqlite3.PARSE_DECLTYPES)
-    cur = conn.cursor()
-    cur.execute(CREATE_USERS_TABLE)
-    conn.commit()
-    yield conn
-    conn.close()
+  conn = sqlite3.connect(":memory:", detect_types=sqlite3.PARSE_DECLTYPES)
+  cur = conn.cursor()
+  cur.execute(CREATE_USERS_TABLE)
+  conn.commit()
+  yield conn
+  conn.close()
 
 
 def test_create_user(test_conn):
@@ -105,17 +103,16 @@ def test_get_user(test_conn):
   assert res == (1, "A", "a@email.com", date(2026,5,11), 6, 4, None)
 
 def test_get_user_not_found(test_conn):
-    """Should not return a user when ID does not exist"""
-    user = {
-      "name": "B",
-      "email": "b@email.com",
-      "password": "5678",
-      "date_last_period": "2026-06-12"
-    }
-    new_user_id = create_user(user, test_conn)
-
-    res = get_user(2, test_conn)
-    assert res == None
+  """Should not return a user when ID does not exist"""
+  user = {
+    "name": "B",
+    "email": "b@email.com",
+    "password": "5678",
+    "date_last_period": "2026-06-12"
+  }
+  create_user(user, test_conn)
+  res = get_user(2, test_conn)
+  assert res == None
 
 def test_get_user_for_auth(test_conn):
   """Should successfully retrieve a user with password from the db"""
@@ -128,7 +125,6 @@ def test_get_user_for_auth(test_conn):
     "rest_offset_after": 4,
   }
   user_id = create_user(user, test_conn)
-
   res = get_user_for_auth(user_id, test_conn)
   assert res == (1, "A", "a@email.com", "1234", date(2026,5,11), 6, 4, None)
 
