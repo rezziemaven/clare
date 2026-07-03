@@ -6,7 +6,7 @@ from app.models.user import CREATE_USER, GET_USER, GET_USER_FOR_AUTH
 
 def create_user(user:User, conn: sqlite3.Connection) -> int | None:
     try:
-        new_user = (user["name"], user["email"], user["password"], date.fromisoformat(user["date_last_period"]), user.get("rest_offset_before", None), user.get("rest_offset_after", None))
+        new_user = (user["name"], user["email"], user["password"], date.fromisoformat(user["date_last_period"]), user.get("rest_offset_before", 5), user.get("rest_offset_after", 5))
 
         res = conn.execute(CREATE_USER, new_user)
         conn.commit()
