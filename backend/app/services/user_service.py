@@ -17,27 +17,27 @@ def create_user(user:User, conn: sqlite3.Connection) -> int | None:
         print("Failed to create user:", e)
         return None
 
-def get_user(userId: int, conn: sqlite3.Connection) -> User | None:
+def get_user(user_id: int, conn: sqlite3.Connection) -> User | None:
     try:
         cur = conn.cursor()
-        cur.execute(GET_USER, (userId,))
+        cur.execute(GET_USER, (user_id,))
         row = cur.fetchone()
         print(f"row: {row}")
         return row
     except sqlite3.Error as e:
         print("Failed to get user:", e)
 
-def get_user_for_auth(userId: int, conn: sqlite3.Connection) -> User | None:
+def get_user_for_auth(user_id: int, conn: sqlite3.Connection) -> User | None:
     try:
         cur = conn.cursor()
-        cur.execute(GET_USER_FOR_AUTH, (userId,))
+        cur.execute(GET_USER_FOR_AUTH, (user_id,))
         row = cur.fetchone()
         print(f"row: {row}")
         return row
     except sqlite3.Error as e:
         print("Failed to get user:", e)
 
-def update_user(userId: int, updateUserPayload: UpdateUserPayload, conn: sqlite3.Connection) -> User | None:
+def update_user(user_id: int, updateUserPayload: UpdateUserPayload, conn: sqlite3.Connection) -> User | None:
     try:
         # need to build query based on what the payload actually has set, making sure none of the values are None
         if updateUserPayload is None:
@@ -51,9 +51,9 @@ def update_user(userId: int, updateUserPayload: UpdateUserPayload, conn: sqlite3
         query.removesuffix(",")
         query += "WHERE id = ?"
 
-        conn.execute(query, (userId,))
+        conn.execute(query, (user_id,))
         conn.commit()
-        return get_user(userId, conn)
+        return get_user(user_id, conn)
     except ValueError as e:
         print("Invalid date format given: use YYYY-MM-DD")
     except sqlite3.Error as e:
