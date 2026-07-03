@@ -42,14 +42,18 @@ def update_user(user_id: int, update_user_payload: UpdateUserPayload, conn: sqli
         # need to build query based on what the payload actually has set, making sure none of the values are None
         if update_user_payload is None:
             return None
-        query = "UPDATE users SET"
+        query = "UPDATE users SET "
         for col in update_user_payload:
             if col == "date_last_period":
-                query += f"{col} = {date.fromisoformat(update_user_payload[col])}"
+                query += f"{col} = '{date.fromisoformat(update_user_payload[col])}', "
+            elif type(update_user_payload[col]) == str:
+              query += f"{col} = '{update_user_payload[col]}', "
             else:
-                query += f"{col} = {update_user_payload[col]},"
-        query.removesuffix(",")
-        query += "WHERE id = ?"
+                query += f"{col} = {update_user_payload[col]}, "
+        query = query.removesuffix(", ")
+        print("query:", query)
+        query += " WHERE id = ?"
+        print("full query:", query)
 
         conn.execute(query, (user_id,))
         conn.commit()
