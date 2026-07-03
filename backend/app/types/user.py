@@ -10,3 +10,11 @@ class User(TypedDict):
   rest_offset_before: NotRequired[int]
   rest_offset_after: NotRequired[int]
   calendar_url: NotRequired[str]
+
+class UpdateUserPayload(TypedDict):
+  name: NotRequired[str]
+  email: NotRequired[str]
+  date_last_period: NotRequired[datetime.date]
+  rest_offset_before: NotRequired[int]
+  rest_offset_after: NotRequired[int]
+  calendar_url: NotRequired[str]
