@@ -4,7 +4,7 @@ from datetime import date
 from app.types.user import User
 from app.models.user import CREATE_USER, GET_USER, GET_USER_FOR_AUTH
 
-def create_user(user:User, conn) -> int | None:
+def create_user(user:User, conn: sqlite3.Connection) -> int | None:
     try:
         new_user = (user["name"], user["email"], user["password"], date.fromisoformat(user["date_last_period"]), user.get("rest_offset_before", None), user.get("rest_offset_after", None))
 
@@ -17,7 +17,7 @@ def create_user(user:User, conn) -> int | None:
         print("Failed to create user:", e)
         return None
 
-def get_user(userId: int, conn) -> User | None:
+def get_user(userId: int, conn: sqlite3.Connection) -> User | None:
     try:
         cur = conn.cursor()
         cur.execute(GET_USER, (userId,))
@@ -27,7 +27,7 @@ def get_user(userId: int, conn) -> User | None:
     except sqlite3.Error as e:
         print("Failed to get user:", e)
 
-def get_user_for_auth(userId: int, conn) -> User | None:
+def get_user_for_auth(userId: int, conn: sqlite3.Connection) -> User | None:
     try:
         cur = conn.cursor()
         cur.execute(GET_USER_FOR_AUTH, (userId,))
