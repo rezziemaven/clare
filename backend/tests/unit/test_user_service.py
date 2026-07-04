@@ -2,7 +2,7 @@ import pytest
 from datetime import date
 from app.utils.sqlite import sqlite3
 
-from app.services.user_service import create_user, get_user, get_user_for_auth, update_user
+from app.services.user_service import create_user, get_user, get_user_for_auth, update_user, delete_user
 from app.models.user import CREATE_USERS_TABLE
 
 @pytest.fixture
@@ -178,6 +178,37 @@ def test_update_user_no_payload(test_conn):
 
   assert res == None
 
+def test_delete_user(test_conn):
+  """Should return True if user successfully deleted"""
+
+  user = {
+    "name": "E",
+    "email": "e@email.com",
+    "password": "2222",
+    "date_last_period": "2026-03-03"
+  }
+
+  user_id = create_user(user, test_conn)
+
+  res = delete_user(user_id, test_conn)
+
+  assert res == True
+
+def test_delete_user_not_found(test_conn):
+  """Should return False if user id doesn't exist"""
+
+  user = {
+    "name": "F",
+    "email": "f@email.com",
+    "password": "3333",
+    "date_last_period": "2026-04-04"
+  }
+
+  create_user(user, test_conn)
+
+  res = delete_user(2, test_conn)
+
+  assert res == False
 
 
 
