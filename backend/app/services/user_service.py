@@ -2,7 +2,7 @@ import sqlite3
 from datetime import date
 
 from app.types.user import User, UpdateUserPayload
-from app.models.user import CREATE_USER, GET_USER, GET_USER_FOR_AUTH
+from app.models.user import CREATE_USER, GET_USER, GET_USER_FOR_AUTH, DELETE_USER
 
 def create_user(user:User, conn: sqlite3.Connection) -> int | None:
     try:
@@ -62,4 +62,16 @@ def update_user(user_id: int, update_user_payload: UpdateUserPayload, conn: sqli
         print("Invalid date format given: use YYYY-MM-DD")
     except sqlite3.Error as e:
         print("Failed to update user:", e)
+        return None
+
+def delete_user(user_id: int, conn: sqlite3.Connection) -> bool | None:
+    try:
+        user = get_user(user_id, conn)
+        if user is None:
+            return False
+        conn.execute(DELETE_USER, (user_id,))
+        return True
+
+    except sqlite3.Error as e:
+        print("Failed to delete user:", e)
         return None
