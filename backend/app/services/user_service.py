@@ -22,7 +22,6 @@ def get_user(user_id: int, conn: sqlite3.Connection) -> User | None:
         cur = conn.cursor()
         cur.execute(GET_USER, (user_id,))
         row: User | None = cur.fetchone()
-        print(f"row: {row}")
         return row
     except sqlite3.Error as e:
         print("Failed to get user:", e)
@@ -33,7 +32,6 @@ def get_user_for_auth(user_id: int, conn: sqlite3.Connection) -> User | None:
         cur = conn.cursor()
         cur.execute(GET_USER_FOR_AUTH, (user_id,))
         row: User | None = cur.fetchone()
-        print(f"row: {row}")
         return row
     except sqlite3.Error as e:
         print("Failed to get user:", e)
@@ -41,7 +39,6 @@ def get_user_for_auth(user_id: int, conn: sqlite3.Connection) -> User | None:
 
 def update_user(user_id: int, update_user_payload: UpdateUserPayload, conn: sqlite3.Connection) -> User | None:
     try:
-        # need to build query based on what the payload actually has set, making sure none of the values are None
         if update_user_payload is None:
             return None
         query = "UPDATE users SET "
@@ -53,10 +50,7 @@ def update_user(user_id: int, update_user_payload: UpdateUserPayload, conn: sqli
             else:
                 query += f"{col} = {update_user_payload[col]}, "
         query = query.removesuffix(", ")
-        print("query:", query)
         query += " WHERE id = ?"
-        print("full query:", query)
-
         conn.execute(query, (user_id,))
         conn.commit()
         return get_user(user_id, conn)
