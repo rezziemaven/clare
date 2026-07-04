@@ -21,21 +21,23 @@ def get_user(user_id: int, conn: sqlite3.Connection) -> User | None:
     try:
         cur = conn.cursor()
         cur.execute(GET_USER, (user_id,))
-        row = cur.fetchone()
+        row: User | None = cur.fetchone()
         print(f"row: {row}")
         return row
     except sqlite3.Error as e:
         print("Failed to get user:", e)
+        return None
 
 def get_user_for_auth(user_id: int, conn: sqlite3.Connection) -> User | None:
     try:
         cur = conn.cursor()
         cur.execute(GET_USER_FOR_AUTH, (user_id,))
-        row = cur.fetchone()
+        row: User | None = cur.fetchone()
         print(f"row: {row}")
         return row
     except sqlite3.Error as e:
         print("Failed to get user:", e)
+        return None
 
 def update_user(user_id: int, update_user_payload: UpdateUserPayload, conn: sqlite3.Connection) -> User | None:
     try:
