@@ -21,6 +21,7 @@ GET_USER_FOR_AUTH = """SELECT id, email, password FROM users WHERE email = ?"""
 
 DELETE_USER = """DELETE FROM users where id = ?"""
 
+
 def user_model() -> sqlite3.Cursor | None:
     try:
         with sqlite3.connect("app/models/clare.db") as conn:
@@ -30,5 +31,3 @@ def user_model() -> sqlite3.Cursor | None:
             print("User table created successfully.")
     except sqlite3.OperationalError as e:
         print("Failed to create user table:", e)
-
-
