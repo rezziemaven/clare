@@ -1,21 +1,26 @@
 import sqlite3
 from datetime import date
 
-from app.types.user import User, UpdateUserPayload
+from app.types.user import (
+    User,
+    SignUpPayload,
+    UpdateUserPayload,
+    UpdateUserPasswordPayload,
+)
 from app.models.user import CREATE_USER, GET_USER, GET_USER_FOR_AUTH, DELETE_USER
 
-def create_user(user:User, conn: sqlite3.Connection) -> int | None:
+
+def create_user(user: SignUpPayload, conn: sqlite3.Connection) -> int | None:
     try:
-        new_user = (user["name"], user["email"], user["password"], date.fromisoformat(user["date_last_period"]), user.get("rest_offset_before", 5), user.get("rest_offset_after", 5))
+        new_user = (user["name"], user["email"], user["password"])
 
         res = conn.execute(CREATE_USER, new_user)
         conn.commit()
         return res.lastrowid
-    except ValueError as e:
-        print("Invalid date format given: use YYYY-MM-DD")
     except sqlite3.Error as e:
         print("Failed to create user:", e)
         return None
+
 
 def get_user(user_id: int, conn: sqlite3.Connection) -> User | None:
     try:
@@ -27,17 +32,21 @@ def get_user(user_id: int, conn: sqlite3.Connection) -> User | None:
         print("Failed to get user:", e)
         return None
 
-def get_user_for_auth(user_id: int, conn: sqlite3.Connection) -> User | None:
+
+def get_user_for_auth(email: str, conn: sqlite3.Connection) -> User | None:
     try:
         cur = conn.cursor()
-        cur.execute(GET_USER_FOR_AUTH, (user_id,))
+        cur.execute(GET_USER_FOR_AUTH, (email,))
         row: User | None = cur.fetchone()
         return row
     except sqlite3.Error as e:
         print("Failed to get user:", e)
         return None
 
-def update_user(user_id: int, update_user_payload: UpdateUserPayload, conn: sqlite3.Connection) -> User | None:
+
+def update_user(
+    user_id: int, update_user_payload: UpdateUserPayload, conn: sqlite3.Connection
+) -> User | None:
     try:
         if update_user_payload is None:
             return None
@@ -46,7 +55,7 @@ def update_user(user_id: int, update_user_payload: UpdateUserPayload, conn: sqli
             if col == "date_last_period":
                 query += f"{col} = '{date.fromisoformat(update_user_payload[col])}', "
             elif type(update_user_payload[col]) == str:
-              query += f"{col} = '{update_user_payload[col]}', "
+                query += f"{col} = '{update_user_payload[col]}', "
             else:
                 query += f"{col} = {update_user_payload[col]}, "
         query = query.removesuffix(", ")
@@ -60,6 +69,7 @@ def update_user(user_id: int, update_user_payload: UpdateUserPayload, conn: sqli
         print("Failed to update user:", e)
         return None
 
+
 def delete_user(user_id: int, conn: sqlite3.Connection) -> bool | None:
     try:
         user = get_user(user_id, conn)
@@ -71,3 +81,12 @@ def delete_user(user_id: int, conn: sqlite3.Connection) -> bool | None:
     except sqlite3.Error as e:
         print("Failed to delete user:", e)
         return None
+
+
+# TODO: Finish working on update_user_password after auth is sorted
+# def update_user_password(user_id: int, update_user_password_payload: UpdateUserPasswordPayload, conn: sqlite3.Connection):
+#     try:
+
+#     except sqlite3.Error as e:
+#         print("Failed to update user:", e)
+#         return None

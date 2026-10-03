@@ -20,3 +20,9 @@ class UpdateUserPayload(TypedDict):
     rest_offset_before: NotRequired[int]
     rest_offset_after: NotRequired[int]
     calendar_url: NotRequired[str]
+
+
+class SignUpPayload(TypedDict):
+    name: str
+    email: str
+    password: str
