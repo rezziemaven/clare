@@ -5,7 +5,7 @@ CREATE_USERS_TABLE = """CREATE TABLE IF NOT EXISTS users (
         name TEXT NOT NULL,
         email TEXT UNIQUE NOT NULL,
         password TEXT NOT NULL,
-        date_last_period DATE NOT NULL,
+        date_last_period DATE,
         rest_offset_before INTEGER DEFAULT 5,
         rest_offset_after INTEGER DEFAULT 5,
         calendar_url TEXT
