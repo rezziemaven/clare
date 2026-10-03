@@ -12,8 +12,8 @@ CREATE_USERS_TABLE = """CREATE TABLE IF NOT EXISTS users (
         );"""
 
 CREATE_USER = """INSERT INTO users
-(name, email, password, date_last_period, rest_offset_before, rest_offset_after)
-VALUES(?,?,?,?,?,?)"""
+(name, email, password)
+VALUES(?,?,?)"""
 
 GET_USER = """SELECT id, name, email, date_last_period, rest_offset_before, rest_offset_after, calendar_url FROM users WHERE id = ?"""
 
